@@ -1,6 +1,34 @@
 const express = require('express');
 
+const fs = require('fs');
+
 const app = express();
+const cors = require('cors');
+const morgan = require('morgan');
+
+
+
+// midleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(morgan('dev'));
+app.use(cors());
+
+// send html files
+
+app.get('/file', (req, res) => {
+    fs.readFile('./pages/index.html', (err, data) => {
+        if (err) {
+            console.log(err, "error");
+            res.send('<h3>something went wrong</h3>')
+        } else {
+            res.write(data)
+            res.end();
+        }
+    })
+});
+
 
 // for getting data from server 
 app.get('/', (req, res) => {
